@@ -10,8 +10,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="list" element={<ListCountries />} />
-          <Route path="details" element={<Details />} />
+          <Route path="/" element={<ListCountries />} />
+          <Route path="/:country" element={<Details />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
