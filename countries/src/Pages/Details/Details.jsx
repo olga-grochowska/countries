@@ -2,49 +2,70 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { NoMatch } from "../../components/NoMatch";
 import { DarkModeContext } from "../../context/DarkModeContext";
+import { BackButton } from "./BackButton";
 import styled from "styled-components";
 
 const CountryDetailsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "back"
+    "flag"
+    "text";
   @media (min-width: 850px) {
-    flex-direction: row;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "back back "
+      "flag text";
+    column-gap: 30px;
   }
   & > * {
-    margin: 30px;
+    margin: 30px 30px 60px 30px;
+  }
+`;
+
+const BackButtonContainer = styled.div`
+  grid-area: back;
+  padding: 10px 0px;
+  margin-bottom: 30px;
+  @media (min-width: 1100px) {
+    padding: 15px 20px;
+    margin-bottom: 0px;
   }
 `;
 
 const CountryFlagImage = styled.img`
-  width: 70%;
+  width: 80%;
   height: auto;
+  grid-area: flag;
+  align-self: center;
+  @media (min-width: 600px) {
+    width: 60%;
+  }
+  @media (min-width: 850px) {
+    justify-self: end;
+    width: 80%;
+  }
+  @media (min-width: 1300px) {
+    width: 60%;
+  }
   border-radius: 5px;
   -webkit-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
   -moz-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
   box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
-  @media (min-width: 850px) {
-    width: 40%;
-  }
-  @media (min-width: 1300px) {
-    width: 30%;
-  }
 `;
 
 const CountryDetailsAll = styled.div`
+  grid-are: text;
+  align-self: center;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   & > h2 {
     font-size: 2rem;
-    padding: 20px 10px;
-  }
-  @media (min-width: 850px) {
-    width: 50%;
-  }
-  @media (min-width: 1300px) {
-    width: 40%;
+    padding: 10px;
   }
 `;
 
@@ -72,7 +93,7 @@ const CountryDetailsBorders = styled.div`
 `;
 
 const CountryDetailsBorderItem = styled.p`
-  padding: 2px 15px;
+  padding: 4px 15px;
   border-radius: 5px;
   -webkit-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
   -moz-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
@@ -103,6 +124,9 @@ export const Details = () => {
             backgroundColor: currentTheme.background,
           }}
         >
+          <BackButtonContainer>
+            <BackButton />
+          </BackButtonContainer>
           <CountryFlagImage
             src={countryDetails.flag}
             alt={`Flag of ${countryDetails.name}`}
