@@ -9,6 +9,9 @@ const HeaderContainer = styled.div`
   align-items: center;
   padding: 10px;
   margin: 0 auto;
+  -webkit-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
+  box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
   @media (min-width: 600px) {
     padding: 10px 30px;
   }
