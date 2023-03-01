@@ -3,7 +3,15 @@ import { useParams } from "react-router-dom";
 import { NoMatch } from "../../components/NoMatch";
 import { DarkModeContext } from "../../context/DarkModeContext";
 import { BackButton } from "./BackButton";
+import { RotatingLines } from "react-loader-spinner";
 import styled from "styled-components";
+
+const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+`;
 
 const CountryDetailsContainer = styled.div`
   display: grid;
@@ -104,12 +112,17 @@ export const Details = () => {
   const { currentTheme } = useContext(DarkModeContext);
   const { country } = useParams();
   const [countryDetails, setCountryDetails] = useState();
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     fetch(
       `https://restcountries.com/v2/name/${country}?fields=name,nativeName,population,capital,region,subregion,topLevelDomain,currencies,languages,borders,flag&fullText=true`
     )
       .then((response) => response.json())
-      .then((data) => setCountryDetails(data[0]))
+      .then((data) => {
+        setIsLoaded(true);
+        setCountryDetails(data[0]);
+      })
       .catch((error) => {
         console.error("Error:", error);
       });
@@ -117,7 +130,23 @@ export const Details = () => {
 
   return (
     <>
-      {countryDetails ? (
+      {!isLoaded ? (
+        <LoadingContainer
+          style={{
+            color: currentTheme.color,
+            backgroundColor: currentTheme.background,
+          }}
+        >
+          <h2>Loading...</h2>
+          <RotatingLines
+            strokeColor="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="96"
+            visible={true}
+          />
+        </LoadingContainer>
+      ) : countryDetails ? (
         <CountryDetailsContainer
           style={{
             color: currentTheme.color,
