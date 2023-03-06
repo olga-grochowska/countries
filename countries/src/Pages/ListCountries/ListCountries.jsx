@@ -3,6 +3,7 @@ import { DarkModeContext } from "../../context/DarkModeContext";
 import { ListCountriesItem } from "./ListCountriesItem";
 import { RotatingLines } from "react-loader-spinner";
 import styled from "styled-components";
+import { Search } from "./Search";
 
 const ListCountriesContainer = styled.div`
   display: flex;
@@ -18,6 +19,8 @@ export const ListCountries = () => {
   const { currentTheme } = useContext(DarkModeContext);
   const [countries, setCountries] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
   useEffect(() => {
     fetch(
       "https://restcountries.com/v2/all?fields=name,capital,flag,population,region"
@@ -31,38 +34,55 @@ export const ListCountries = () => {
         console.error("Error:", error);
       });
   }, []);
+
   return (
-    <ListCountriesContainer
-      style={{
-        color: currentTheme.color,
-        backgroundColor: currentTheme.background,
-      }}
-    >
-      {!isLoaded ? (
-        <LoadingContainer>
-          <h2>Loading...</h2>
-          <RotatingLines
-            strokeColor="grey"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="96"
-            visible={true}
-          />
-        </LoadingContainer>
-      ) : (
-        countries.map((country) => {
-          return (
-            <ListCountriesItem
-              key={country.name}
-              flag={country.flag}
-              name={country.name}
-              population={country.population}
-              region={country.region}
-              capital={country.capital}
+    <>
+      <Search handleChangeInput={(e) => setInputValue(e.target.value)} />
+      <ListCountriesContainer
+        style={{
+          color: currentTheme.color,
+          backgroundColor: currentTheme.background,
+        }}
+      >
+        {!isLoaded ? (
+          <LoadingContainer>
+            <h2>Loading...</h2>
+            <RotatingLines
+              strokeColor="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="96"
+              visible={true}
             />
-          );
-        })
-      )}
-    </ListCountriesContainer>
+          </LoadingContainer>
+        ) : (
+          countries
+            .filter((country) => {
+              if (inputValue === "") {
+                return country;
+              } else if (
+                country.name
+                  .toLowerCase()
+                  .includes(inputValue.toLocaleLowerCase())
+              ) {
+                return country;
+              }
+              return false;
+            })
+            .map((country) => {
+              return (
+                <ListCountriesItem
+                  key={country.name}
+                  flag={country.flag}
+                  name={country.name}
+                  population={country.population}
+                  region={country.region}
+                  capital={country.capital}
+                />
+              );
+            })
+        )}
+      </ListCountriesContainer>
+    </>
   );
 };
