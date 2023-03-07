@@ -4,6 +4,7 @@ import { ListCountriesItem } from "./ListCountriesItem";
 import { RotatingLines } from "react-loader-spinner";
 import styled from "styled-components";
 import { Search } from "./Search";
+import { Filter } from "./Filter";
 
 const ListCountriesContainer = styled.div`
   display: flex;
@@ -20,6 +21,7 @@ export const ListCountries = () => {
   const [countries, setCountries] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [filterValue, setFilterValue] = useState("all");
 
   useEffect(() => {
     fetch(
@@ -38,6 +40,7 @@ export const ListCountries = () => {
   return (
     <>
       <Search handleChangeInput={(e) => setInputValue(e.target.value)} />
+      <Filter handleChangeFilter={(e) => setFilterValue(e.target.value)} />
       <ListCountriesContainer
         style={{
           color: currentTheme.color,
@@ -58,12 +61,20 @@ export const ListCountries = () => {
         ) : (
           countries
             .filter((country) => {
+              if (filterValue === "all") {
+                return country;
+              } else if (
+                country.region.toLowerCase().includes(filterValue.toLowerCase())
+              ) {
+                return country;
+              }
+              return false;
+            })
+            .filter((country) => {
               if (inputValue === "") {
                 return country;
               } else if (
-                country.name
-                  .toLowerCase()
-                  .includes(inputValue.toLocaleLowerCase())
+                country.name.toLowerCase().includes(inputValue.toLowerCase())
               ) {
                 return country;
               }
