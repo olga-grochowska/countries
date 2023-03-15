@@ -6,7 +6,7 @@ const SelectField = styled.select`
   padding: 12px;
   border: none;
   border-radius: 5px;
-  width: 150px;
+  width: 250px;
   cursor: pointer;
   -webkit-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);
   -moz-box-shadow: 0px 0px 24px -8px rgba(66, 68, 90, 1);

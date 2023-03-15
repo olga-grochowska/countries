@@ -6,6 +6,22 @@ import styled from "styled-components";
 import { Search } from "./Search";
 import { Filter } from "./Filter";
 
+const SearchAndFilterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  @media (min-width: 600px) {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 30px;
+  }
+  @media (min-width: 1100px) {
+    padding: 30px 50px;
+  }
+`;
+
 const ListCountriesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -39,8 +55,15 @@ export const ListCountries = () => {
 
   return (
     <>
-      <Search handleChangeInput={(e) => setInputValue(e.target.value)} />
-      <Filter handleChangeFilter={(e) => setFilterValue(e.target.value)} />
+      <SearchAndFilterContainer
+        style={{
+          color: currentTheme.color,
+          backgroundColor: currentTheme.background,
+        }}
+      >
+        <Search handleChangeInput={(e) => setInputValue(e.target.value)} />
+        <Filter handleChangeFilter={(e) => setFilterValue(e.target.value)} />
+      </SearchAndFilterContainer>
       <ListCountriesContainer
         style={{
           color: currentTheme.color,
